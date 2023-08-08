@@ -1,0 +1,9 @@
+房價預測
+資料練習來源 : https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data
+
+練習資料的方式
+1.使用 MySQL 儲存資料
+2.使用 Jupyter 撈取資料
+3.資料清理與合併
+
+<以下待更新>

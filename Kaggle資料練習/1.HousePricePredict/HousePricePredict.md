@@ -6,6 +6,7 @@
 ##### 1.使用 MySQL 儲存資料
 * MySQL Workbench 載點 : https://www.mysql.com/products/workbench/
 
-##### 2.使用 Jupyter 撈取SQL資料
+##### 2.撈取SQL資料
+* 使用pymysql 與 pandas
 
 ##### 3.資料清理與合併並進行分析

@@ -1,0 +1,154 @@
+# 使用 Linear Models 預測房價 "程式陌生語法" 與 "回歸模型"學習 筆記
+* 程式碼參考這個練習 : https://github.com/Ricky7737/DataAnalysisAndLearning/blob/main/Kaggle%E8%B3%87%E6%96%99%E7%B7%B4%E7%BF%92/1.HousePricePredict/%E7%B7%B4%E7%BF%92%E9%A0%90%E6%B8%AC/2.%E4%BD%BF%E7%94%A8%20Linear%20Models%20%20%E9%A0%90%E6%B8%AC%E6%88%BF%E5%83%B9/PredictUseLinearModels.ipynb
+  
+## 1.取對數 np.log1p
+  * 可以將資料分布從偏態分布取 log 後變成正態分布
+  * **np.log1p 為 取對數後 +1**，用意在於 x = 0 時變成 log(0)，這個在數學上是未被定義的，而 log(1) 則等於 0，所以 x 都要加上 1。因為我們原始的資料中，部分欄位的是 0，所以必須 +1 才不會使資料出現錯誤
+  * 另外 **np.log1p** 可以對較大的數值進行壓縮，同時拉伸較小的數值，使資料分布更加接近 **正態分布**
+  * 以下為語法 :
+```
+    np.log1p(data['要取對數的目標欄位'])
+```
+ * 範例 :
+```
+    import numpy as np
+    data = np.array([1, 2, 3, 4, 5])
+    # 使用 log1p
+    log1p_data = np.log1p(data)
+    print(log1p_data)
+    
+    output:
+    [0.69314718 1.09861229 1.38629436 1.60943791 1.79175947]
+```
+
+## 2. Sklearn Liner Regression(線性迴歸) (L1 Lasso) 與 (L2 Ridge)
+ * 資料來源引用 1 : https://roger010620.medium.com/linear-regression-lasso-ridge%E4%BB%8B%E7%B4%B9-%E9%99%84python-code-76e89af4dce9
+ * 資料來源引用 1 : https://ithelp.ithome.com.tw/articles/10227654
+ * 這三組方式同樣都是先篩選出一個最佳的 alpha 與"分配特徵權重"來預測目標資料(Y)，而 **"Ridge" 與 "Lasso"** 正則化相比"單純線性回歸"而言更加重在於對權重的懲罰，而這可以降低模型過度擬合的風險
+### 2.1 Lasso
+   * **Lasso 為 Linear Regression 加上 L1**
+   * 而 Lasso 會使用正規化來優化模型，而且可以在訓練模型中剃除不重要的變數(特徵)
+   * Lasso Python 語法架構
+```
+    #套件安裝
+    pip install scikit-learn
+    
+    # 載入 Lasso 套件
+    from sklearn.liner_model import Lasso
+    reg = Lasso(alpha= 自己設定一個數值)  # alpha 可以調整，來強化正則化強度
+    lasso_model.fit(X_train, y_train)   # 使用 Lasso 訓練數據
+
+    # 進行預測
+    y_pred =  lasso_model.fit(X_train, y_train)
+
+    # 查看特徵權重
+    coefficients = lasso_model.coef_
+```
+
+### 2.2 Ridge (L2 正則化)
+   * **Ridge 為 Linear Regression 加上 L2**
+   * Ridge 在分配模型權重時，會將較於無關的特徵做懲罰，而懲罰越大時就會迫使權重接近 0 ，但相較於 **L1 Lasso** 則還是會保留特徵。
+   * 而我參考練習得程式碼，他則預先列出 alpha 值，並繪製 RMSE(均方根誤差, Root Mean Square Error) 曲線圖來挑出最適合的 alpha 值 (詳細程式碼請參考程式碼)
+   * Ridge 基本語法架構
+```
+    # 載入 Ridge 套件
+    from sklearn.linear_model import Ridge
+    # 調整 alpha 來強化 L2 正則化強度
+    ridge_model = Ridge(alpha= 放入適合的數值)
+    # 訓練模型
+    ridge_model.fit(訓練資料 X_train, 訓練的預測值 y_train)
+    # 預測
+    y_pred = ridge_model.predict(X_test)
+    # 評估模型性能
+    rmse = np.sqrt(mean_sqared_error(y_test, y_pred))
+    r2 = r2_score(y_test, y_pred)
+```
+
+### 2.3 Lasso 與 Ridge 正則化 比較 與 適用數據
+#### 2.3.1 Lasso (L1 正則化)
+   * 如前面所提到，因為 **Lasso** 會替除掉"無關的特徵"，可以減少模型訓練的複雜度，所以可能會比較適用於多維度的資料
+   * 例如:本練習所使用的房地產售價資料，因為裡面有多種特徵，像是時間、房屋材質、土地大小、臥室浴室有幾間之類的。
+     
+#### 2.3.2 Ridge
+   * 如前面提到的，由於 Ridge 不會剔除較無相關的特徵，只會減小他們對模型的影響力，藉由平衡模型與降低過度擬合 
+   * 而 **Ridge** 可以解決多重共線性的問題，多重共線性亦就是資料中存在多個變數之間高度相關的關係，這會使回歸估計正確率降低
+   * 所以 **Ridge** 可能會比較適合用在像是金融資料
+##### 最後重點，使用 Lasso 與 Ridge，可以透過去挑選出適合的 alpha 值，去計算出 RMSE 後再來比較那個 RMSE 比較低，進而選擇適合的方法來訓練資料
+
+### 2.4 額外補充解讀 RMSE 與 R-squared 的方式
+#### 2.4.1 RMSE(均方根誤差，Root-Mean Squared Erorr)
+   * 1.RMSE 越接近零當然是越好的，也就是說"預測的結果"與"實際結果"非常接近.
+   * 2.而 RMSE 數值也比需參考因變數的單位，如預測房價時使用千美元，RMSE結果會與原數據單位相同
+   ##### RMSE 適用時機 
+   * 適用於各種回歸預測模型，例如房價、股票等等
+   * **RMSE 對於離群值比較敏感**，所以可能在數據前清理時可以考慮清除掉少量離群值來再來計算 RMSE
+   * 用於比較不同方式回歸模型的性能，並選擇最佳模型
+   ##### RMSE 計算方式
+   * **1. 首先先來提到 MSE** : 
+   * ![image](https://github.com/Ricky7737/DataAnalysisAndLearning/assets/58324475/b00f2ffa-5c59-47c2-adfb-6c40badce9ed)
+   * **2.解釋這個公式套用在數據上的意思 :**
+     * 1.計算誤差(就是預測值減掉實際觀測值)
+     * 2.再來將誤差都做平方，目的是為了抵銷正負值互相抵銷的影響，同時加強誤差重要性
+     * 3.加總所有平方後的誤差就得到 **MSE**
+   ##### 得到 MSE 後將 MSE 開根號後就得到 RMSE
+   * RMSE 公式，可以看到與 **MSE** 相差一個開根號而已
+   * ![image](https://github.com/Ricky7737/DataAnalysisAndLearning/assets/58324475/8168b1cb-299a-4a24-a674-c3f05740a475)
+
+   ##### MSE 計算方式，以Python寫出
+    ```
+    import numpy as np
+    # 實際觀測值
+    actual_values = np.array([5, 10, 15, 20, 25])
+    # 模型預測值
+    predicted_values = np.array([6, 11, 14, 19, 26])
+    # 計算每個預測值的誤差
+    errors = actual_values - predicted_values
+    # 將誤差平方
+    squared_errors = errors ** 2
+    # 計算均方誤差（MSE）
+    mse = np.mean(squared_errors)
+    print("均方誤差（MSE）:", mse)
+    
+    # 計算均方根誤差（RMSE）
+    rmse = np.sqrt(mse)
+    print("均方根誤差（RMSE）:", rmse)
+    
+    output:
+    均方誤差（MSE）: 3.6
+    均方根誤差（RMSE）: 1.8973665961010275
+    ```
+    
+
+   #### 2.4.2 R-squared 又稱為判定係數(coefficient of determination)
+   * **R-squared** 數值範圍取值在 **0 ≤ R² ≤ 1**
+   * **R² = 0** 時表示無法解釋目標變數之變異性，模型無法擬合數據
+   * **但 R² = 1** 則表示模型完全擬合數據，也就是預測結果非常貼近真實數據。但實際上很難大於 1 以上，因為實際的模型存在著噪聲、測量誤差等問題。如果擬合程度非常高，當模型在未來預測新數據的時候，可能無法泛化到新的數據
+   * **若 R² 為負值**，表示模型擬合程度非常差，可能存在問題需要解決
+   * **通常 R² > 0.75 時 :** 表示回歸模型的擬合度良好，解釋能力程度較高
+   * **0.5 < R² < 0.75 時** : 雖說模型擬合度尚可，但仍可以進一步調整修正模型來提升解釋能力與準確度
+   * 而 **R² < 0.5** 則表示擬合有問題，需要重新篩選訓練的自變數來提升擬合度
+     
+## 3.XGBoost （eXtreme Gradient Boosting）
+參考網址 : https://ithelp.ithome.com.tw/articles/10273094
+> XGBoost 採用隨機採樣的方式與隨機森林方法一樣生成多棵簡單的決策樹(Decision Tree)。但這會使模型可能過於複雜化，而噪音也會隨之增加影響模型判斷能力，所以 XGBoost 結合正則化使損失函數更加平滑。
+* XGBoost 圖片。參考連結 : https://machinelearningmastery.com/visualize-gradient-boosting-decision-trees-xgboost-python/
+* ![image](https://github.com/Ricky7737/DataAnalysisAndLearning/assets/58324475/f48388ec-e99b-4c63-927e-a9add9b0c270)
+
+#### 3.1 XGBoost 優點
+   * **1.高準確性**，而且可以自動處理數據分布不平衡的能力
+   * **2.自動處理遺漏值**，無須另外處裡
+   * **3.自動分配重點特徵權重**
+   * **4.因為引入正則化方式**，所以可以防止模型過度擬合，更如意泛化的未來的測試數據
+   * **5.支援自動停止訓練機制** : 當數據訓練到一定程度無法在提升時，則會啟動停止訓練機制防止模型過度擬合
+   * **6.提升梯度(Gradient)** : 梯度為 **"預測值"與"實際值"** 之間的誤差
+
+#### 3.2 XGBoost 參數介紹
+   * **1.n_estimators :** 決策樹數量，也稱迭代次數，每次迭代都會建立新的決策樹
+   * **2.max_depth:** 控制每顆決策樹的最大深度，深度越深模型可能越複雜，也容易出現過度擬和
+   * **3.learning_rate:** 學習速度，控制每一次迭代參數更新的幅度，較小的學習速率可以使模型收斂較穩定，但可能需要更多的迭代次數
+   * 其他的可以參考這裡 : https://blog.csdn.net/m0_37870649/article/details/82707197
+
+#### 補充決策樹
+* 決策樹由 **節點(nodes)* 和 **分支(beanches)* 組成，每個節點代表一個特徵或樹性，而分支則代表 **結果* 或 **決策*，最終到達葉子就是 **預測結果* 或** 類別*
+##### 決策樹範例 : https://reurl.cc/1GmrzY
+* ![image](https://github.com/Ricky7737/DataAnalysisAndLearning/assets/58324475/45775321-b160-4f96-9870-201ddbaa9a63)

@@ -20,7 +20,18 @@
 ### 2.2 Boosting
    * 與 Bagging 類似，但差異在於會將舊分類器錯誤的資料權重拉高，然後再訓練出新的分類器
 
-#### 參考資料
+## 3.隨機森林使用環境
+   * ```金融環境 :``` 透過隨機森林可以找出 "忠誠度" 較高的顧客。或是找出叫劣質的顧客
+   * ```醫學環境 :``` 可以分析病患的 "醫療紀錄"，以便判斷未來病患的疾病
+   * ```股票市場 :``` 可以識別股票的 "行為" 與 "預期" 的 "損失" 或 "利潤"
+   * ```電子商務環境 :```透過分析過往客戶的消費行為與愛好，來預測未來的客戶是否喜歡推薦產品。
+
+## 4.隨機森林使用於【分類 Classification】與【回歸 Regression】
+   * ```分類 Classification :``` 使用多數投票法(majority voting) 下去對資料做分類，然後確定最終分類的結果
+   * ```回歸 Regression :``` 隨機森林也可以用在回歸問題，差別在於這是預測一個數值結果。 
+
+#### 詳細資料參考資料
 * [1] : https://medium.com/chung-yi/ml%E5%85%A5%E9%96%80-%E5%8D%81%E4%B8%83-%E9%9A%A8%E6%A9%9F%E6%A3%AE%E6%9E%97-random-forest-6afc24871857
 * [2] : https://www.nvidia.cn/glossary/data-science/random-forest/
 * [3] : https://medium.com/ai%E5%8F%8D%E6%96%97%E5%9F%8E/learning-model-random-forest-ca4e3f8a63d3
+* [4] : https://tomohiroliu22.medium.com/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98%E7%B3%BB%E5%88%97-37-%E9%9A%A8%E6%A9%9F%E6%A3%AE%E6%9E%97%E5%9B%9E%E6%AD%B8-random-forest-regressor-a0f7a57c06c4

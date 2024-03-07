@@ -40,10 +40,11 @@ def majorityElement(nums):
         if count == 0:       #如果計數次數為0
             candidate = num  #設定第一個候選變數為陣列第一個元素
 
-        if num == condidate:
-            count += 1
-        else:
-            count -= 1
+        if num == condidate: # 如果 候選元素 = 陣列中指定到的元素
+            count += 1       # 計數 +1
+        else:                # 如果 候選元素 != 陣列中指定到的元素
+            count -= 1       # 計數 -1
+    return cadidate  # 回傳最終的候選元素  
 ```
 
 ### 舉例一個陣列來顯示邏輯

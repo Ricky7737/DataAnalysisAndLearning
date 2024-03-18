@@ -19,7 +19,7 @@
 > > 所以當列表長度越長，鏈結串列方式所需花費的時間就會比紅黑數來的更長  
 #### 參考資料:
 [1] https://jianjiesun.medium.com/python%E7%AD%86%E8%A8%98-8-hashmap-%E9%9B%9C%E6%B9%8A%E8%A1%A8-697f4baa650a  
-[2] https://segmentfault.com/a/1190000039774584
-[3] https://www.twblogs.net/a/61dd1e2105d76fbd5d59955f
-[4] https://ithelp.ithome.com.tw/articles/10219279
-[5] https://clu.gitbook.io/data-structure-note/1.4.3-red-black-tree
+[2] https://segmentfault.com/a/1190000039774584  
+[3] https://www.twblogs.net/a/61dd1e2105d76fbd5d59955f  
+[4] https://ithelp.ithome.com.tw/articles/10219279  
+[5] https://clu.gitbook.io/data-structure-note/1.4.3-red-black-tree  

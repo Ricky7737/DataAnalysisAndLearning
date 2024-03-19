@@ -2,7 +2,7 @@
 > https://www.hackerrank.com/challenges/weather-observation-station-3/problem?isFullScreen=true  
 > ![image](https://github.com/Ricky7737/DataAnalysisAndLearning/assets/58324475/f9854892-0646-4913-8d9e-04d6e6ee8c0b)
 ### 題目意思
-> 搜尋 ID 為偶數的城市名稱，並且排序
+> 搜尋 ID 為偶數的城市名稱，並且排序，並且去除城市名稱重複的資料
 ### MYSQL
 ```
 select distinct CITY from STATION

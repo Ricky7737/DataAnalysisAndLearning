@@ -31,13 +31,13 @@ WHERE CITY REGEXP '^[aeiouAEIOU]';
 ```
 > ^[aeiouAEIOU] 中的 ^ 表示已開頭字母下去搜尋符合有 aeiou 的名稱
 
-### 2. 找尋開頭為 aeiou 的城市名稱使用 `$`
+### 2. 找尋結尾為 aeiou 的城市名稱使用 `$`
 ```
 SELECT DISTINCT CITY
 FROM STATION
-WHERE CITY REGEXP '^[aeiouAEIOU]';
+WHERE CITY REGEXP '[aeiouAEIOU]$';
 ```
-> [aeiouAEIOU]$ 中的 ^ 表示已開頭字母下去搜尋符合有 aeiou 的名稱
+> [aeiouAEIOU]$ 中的 $ 表示以結尾字母下去搜尋符合有 aeiou 的名稱
 
 ### 參考資料 : 
 [1] : MYSQL 正規表達式操作 : https://www.itread01.com/study/mysql-regexp.html
